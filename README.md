@@ -21,5 +21,7 @@ This plugin allows users to export saved places from Google Maps Lists into a GP
 - Route Planning: Export a collection of destinations (such as restaurants, landmarks, or activity locations) into a GPX file to help with route planning on GPS software or devices.
 - Backup and Sharing: GPX files provide a portable backup of your saved locations and can easily be shared with friends or other mapping tools.
 
-## Installation:
+## Icons:
+<a target="_blank" href="https://icons8.com/icon/26087/bookmark">Ribbon</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+<a target="_blank" href="https://icons8.com/icon/cYqkhYrpp4xs/downloading-updates">Download</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
 
