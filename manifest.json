@@ -1,0 +1,26 @@
+{
+  "manifest_version": 2,
+  "name": "Google Maps Lists GPX Exporter",
+  "version": "1.0",
+  "description": "Download Google Maps Lists to GPX.",
+  "permissions": [
+    "webRequest",
+    "downloads",
+    "*://www.google.com/maps/preview/entitylist/getlist*"
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "icons": {
+    "48": "icons/gpx-icon.png"
+  },
+  "browser_action": {
+    "default_icon": "icons/gpx-icon.png",
+    "default_title": "Download GPX"
+  },
+  "web_accessible_resources": [
+    "icons/gpx-icon.png"
+  ]
+}
+
