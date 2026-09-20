@@ -9,6 +9,19 @@ function updateIcon(hasGPX) {
   browser.browserAction.setIcon({ path: iconPath });
 }
 
+function escapeXml(value) {
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+}
+
 // Listen for the Google Maps entity list request
 browser.webRequest.onCompleted.addListener(
   async (details) => {
@@ -38,10 +51,10 @@ browser.webRequest.onCompleted.addListener(
       }
 
       function toGPX(entry) {
-        let name = entry[2];
+        let name = escapeXml(entry[2]);
         let lat = entry[1][5][2];
         let lon = entry[1][5][3];
-        let comment = entry[3];
+        let comment = escapeXml(entry[3]);
         return `<wpt lat="${lat}" lon="${lon}">
                   <name>${name}</name>
                   <desc>${comment}</desc>
@@ -93,4 +106,3 @@ browser.browserAction.onClicked.addListener(() => {
     console.warn("No GPX data available for download.");
   }
 });
-
