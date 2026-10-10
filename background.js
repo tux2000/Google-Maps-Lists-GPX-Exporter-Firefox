@@ -25,6 +25,13 @@ function escapeXml(value) {
 // Listen for the Google Maps entity list request
 browser.webRequest.onCompleted.addListener(
   async (details) => {
+    const requestUrl = new URL(details.url);
+    const isGoogleHost = /(?:^|\.)google\.(?:[a-z]{2,3}\.)?[a-z]{2,3}$/i.test(requestUrl.hostname);
+    const isHttpRequest = requestUrl.protocol === "http:" || requestUrl.protocol === "https:";
+    if (!isHttpRequest || !isGoogleHost || requestUrl.pathname !== "/maps/preview/entitylist/getlist") {
+      return;
+    }
+
     let currentTime = Date.now();
     if (currentTime - lastProcessedTime < processInterval) {
       console.log("Skipping repeated request.");
@@ -82,7 +89,7 @@ browser.webRequest.onCompleted.addListener(
       updateIcon(false);  // No GPX available due to error
     }
   },
-  { urls: ["*://www.google.com/maps/preview/entitylist/getlist*"] }
+  { urls: ["http://*/*", "https://*/*"] }
 );
 
 // Listen for the user clicking the browser action button
