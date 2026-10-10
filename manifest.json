@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Google Maps Lists GPX Exporter",
-  "version": "1.3",
+  "version": "1.2",
   "description": "Download Google Maps Lists to GPX.",
   "permissions": [
     "webRequest",
