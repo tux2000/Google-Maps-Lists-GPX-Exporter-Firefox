@@ -2,6 +2,23 @@ let lastProcessedTime = 0;
 const processInterval = 1000;  // Minimum interval (1 second) between processing requests
 let latestGPX = "";  // Store the most recent GPX content here
 let listName = "";   // Store the list name for the GPX filename
+const googleMapsHosts = new Set([
+  "google.com", "google.ad", "google.ae", "google.al", "google.am", "google.at", "google.az",
+  "google.ba", "google.be", "google.bg", "google.by", "google.ca", "google.cat", "google.ch",
+  "google.cl", "google.cn", "google.co.id", "google.co.il", "google.co.in", "google.co.jp",
+  "google.co.ke", "google.co.kr", "google.co.nz", "google.co.th", "google.co.uk", "google.co.za",
+  "google.com.ar", "google.com.au", "google.com.bd", "google.com.br", "google.com.co", "google.com.do",
+  "google.com.ec", "google.com.eg", "google.com.gt", "google.com.hk", "google.com.hn", "google.com.jm",
+  "google.com.mx", "google.com.my", "google.com.ng", "google.com.ni", "google.com.pa", "google.com.pe",
+  "google.com.ph", "google.com.pk", "google.com.pr", "google.com.py", "google.com.sa", "google.com.sg",
+  "google.com.sv", "google.com.tr", "google.com.tw", "google.com.ua", "google.com.uy", "google.com.vn",
+  "google.com.ve", "google.cz", "google.de", "google.dk", "google.es", "google.fi", "google.fr",
+  "google.gr", "google.hr", "google.hu", "google.ie", "google.it", "google.nl", "google.no",
+  "google.pl", "google.pt", "google.ro", "google.rs", "google.ru", "google.se", "google.sk"
+]);
+const googleMapsUrlPatterns = Array.from(googleMapsHosts, (host) =>
+  `*://*.${host}/maps/preview/entitylist/getlist*`
+);
 
 // Function to update the icon
 function updateIcon(hasGPX) {
@@ -26,7 +43,9 @@ function escapeXml(value) {
 browser.webRequest.onCompleted.addListener(
   async (details) => {
     const requestUrl = new URL(details.url);
-    const isGoogleHost = /(?:^|\.)google\.(?:[a-z]{2,3}\.)?[a-z]{2,3}$/i.test(requestUrl.hostname);
+    const isGoogleHost = Array.from(googleMapsHosts).some((host) =>
+      requestUrl.hostname === host || requestUrl.hostname.endsWith(`.${host}`)
+    );
     const isHttpRequest = requestUrl.protocol === "http:" || requestUrl.protocol === "https:";
     if (!isHttpRequest || !isGoogleHost || requestUrl.pathname !== "/maps/preview/entitylist/getlist") {
       return;
@@ -89,7 +108,7 @@ browser.webRequest.onCompleted.addListener(
       updateIcon(false);  // No GPX available due to error
     }
   },
-  { urls: ["http://*/*", "https://*/*"] }
+  { urls: googleMapsUrlPatterns }
 );
 
 // Listen for the user clicking the browser action button
